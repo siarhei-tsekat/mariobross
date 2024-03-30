@@ -1,15 +1,15 @@
 package com.me.mariobros.sprite;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
 import com.me.mariobros.MarioBros;
 import com.me.mariobros.scenes.Hud;
+import com.me.mariobros.screens.PlayScreen;
 
 public class Brick extends InteractiveTileObject {
-    public Brick(World world, TiledMap map, Rectangle bounds) {
-        super(world, map, bounds);
+
+    public Brick(PlayScreen screen, Rectangle bounds) {
+        super(screen, bounds);
         fixture.setUserData(this);
         setCategoryFilter(MarioBros.BRICK_BIT);
     }
