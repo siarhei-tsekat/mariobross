@@ -14,11 +14,14 @@ import com.me.mariobros.MarioBros;
 import com.me.mariobros.screens.PlayScreen;
 import com.me.mariobros.sprite.Brick;
 import com.me.mariobros.sprite.Coin;
+import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Goomba;
+import com.me.mariobros.sprite.Turtle;
 
 public class B2WorldCreator {
 
     private Array<Goomba> goombas;
+    private Array<Turtle> turtles;
 
     public B2WorldCreator(PlayScreen screen) {
 
@@ -74,9 +77,25 @@ public class B2WorldCreator {
 
             goombas.add(new Goomba(screen, rect.getX() / MarioBros.PPM, rect.getY() / MarioBros.PPM));
         }
+
+        // create all turtles
+        turtles = new Array<>();
+        for (MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            turtles.add(new Turtle(screen, rect.getX() / MarioBros.PPM, rect.getY() / MarioBros.PPM));
+        }
     }
 
-    public Array<Goomba> getGoombas() {
-        return goombas;
+
+    public Array<Enemy> getEnemies() {
+        Array<Enemy> enemies = new Array<>();
+        enemies.addAll(goombas);
+        enemies.addAll(turtles);
+        return enemies;
     }
+
+//    public static void removeTurtle(Turtle turtle) {
+//        turtles.removeValue(turtle, true);
+//    }
 }

@@ -88,14 +88,23 @@ public class Goomba extends Enemy {
 
     @Override
     public void draw(Batch batch) {
-        if(!destroyed || stateTime < 1) {
+        if (!destroyed || stateTime < 1) {
             super.draw(batch);
         }
     }
 
     @Override
-    public void hitOnHead() {
+    public void hitOnHead(Mario mario) {
         setToDestroy = true;
         MarioBros.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+    }
+
+    @Override
+    public void onEnemyHit(Enemy enemy) {
+        if (enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL) {
+            setToDestroy = true;
+        } else {
+            reverseVelocity(true, false);
+        }
     }
 }
