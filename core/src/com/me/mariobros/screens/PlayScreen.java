@@ -27,6 +27,7 @@ import com.me.mariobros.MarioBros;
 import com.me.mariobros.items.Item;
 import com.me.mariobros.items.ItemDef;
 import com.me.mariobros.items.Mushroom;
+import com.me.mariobros.scenes.GameOverScreen;
 import com.me.mariobros.scenes.Hud;
 import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Goomba;
@@ -136,7 +137,7 @@ public class PlayScreen implements Screen {
 
         hud.update(dt);
 
-        if(player.currentState != Mario.State.DEAD) {
+        if (player.currentState != Mario.State.DEAD) {
             // attach our gamecam to our players.x coordinate
             gamecam.position.x = player.b2body.getPosition().x;
         }
@@ -210,6 +211,11 @@ public class PlayScreen implements Screen {
         // set our batch to now draw what the hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        if(gameOver()) {
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
     }
 
     @Override
@@ -239,5 +245,13 @@ public class PlayScreen implements Screen {
         world.dispose();
         b2dr.dispose();
         hud.dispose();
+    }
+
+    public boolean gameOver() {
+        if (player.currentState == Mario.State.DEAD && player.getStateTimer() > 3) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

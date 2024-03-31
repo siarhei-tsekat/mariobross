@@ -294,4 +294,12 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
     }
+
+    public boolean isDead() {
+        return marioIsDead;
+    }
+
+    public float getStateTimer() {
+        return stateTimer;
+    }
 }
