@@ -24,7 +24,7 @@ public class Coin extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit() {
+    public void onHeadHit(Mario mario) {
 
         if (getCell().getTile().getId() == BLANK_COIN) {
             MarioBros.manager.get("audio/sounds/bump.wav", Sound.class).play();

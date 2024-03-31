@@ -23,6 +23,7 @@ public class MarioBros extends Game {
     public static final short ENEMY_BIT = 64;
     public static final short ENEMY_HEAD_BIT = 128;
     public static final short ITEM_BIT = 256;
+    public static final short MARIO_HEAD_BIT = 512;
 
     /*
         Warning
@@ -42,6 +43,9 @@ public class MarioBros extends Game {
         manager.load("audio/sounds/breakblock.wav", Sound.class);
         manager.load("audio/sounds/powerup.wav", Sound.class);
         manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
+        manager.load("audio/sounds/powerdown.wav", Sound.class);
+        manager.load("audio/sounds/stomp.wav", Sound.class);
+        manager.load("audio/sounds/mariodie.wav", Sound.class);
         manager.finishLoading();
 
         setScreen(new PlayScreen(this));
