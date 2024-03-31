@@ -20,15 +20,22 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.me.mariobros.MarioBros;
+import com.me.mariobros.items.Item;
+import com.me.mariobros.items.ItemDef;
+import com.me.mariobros.items.Mushroom;
 import com.me.mariobros.scenes.Hud;
 import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Goomba;
 import com.me.mariobros.sprite.Mario;
 import com.me.mariobros.tools.B2WorldCreator;
 import com.me.mariobros.tools.WorldContactListener;
+
+import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
 
@@ -49,6 +56,8 @@ public class PlayScreen implements Screen {
 
     private Music music;
     private B2WorldCreator creator;
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(MarioBros game) {
 
@@ -77,7 +86,22 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
 
+        items = new Array<>();
+        itemsToSpawn = new LinkedBlockingQueue<>();
 
+    }
+
+    public void spawnItem(ItemDef itemDef) {
+        itemsToSpawn.add(itemDef);
+    }
+
+    public void handleSpawningItems() {
+        if (!itemsToSpawn.isEmpty()) {
+            ItemDef itemDef = itemsToSpawn.poll();
+            if (itemDef.type == Mushroom.class) {
+                items.add(new Mushroom(this, itemDef.position.x, itemDef.position.y));
+            }
+        }
     }
 
     public TextureAtlas getAtlas() {
@@ -94,16 +118,22 @@ public class PlayScreen implements Screen {
 
     public void update(float dt) {
         handleInput(dt);
+        handleSpawningItems();
 
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
         for (Enemy enemy : creator.getGoombas()) {
             enemy.update(dt);
-            if (enemy.getX() < player.getX() + 224 /  MarioBros.PPM) {
+            if (enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
                 enemy.b2body.setActive(true);
             }
         }
+
+        for (Item item : items) {
+            item.update(dt);
+        }
+
         hud.update(dt);
 
         // attach our gamecam to our players.x coordinate
@@ -166,6 +196,11 @@ public class PlayScreen implements Screen {
         for (Enemy enemy : creator.getGoombas()) {
             enemy.draw(game.batch);
         }
+
+        for (Item item : items) {
+            item.draw(game.batch);
+        }
+
         game.batch.end();
 
         // set our batch to now draw what the hud camera sees

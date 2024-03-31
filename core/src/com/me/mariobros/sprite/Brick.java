@@ -1,6 +1,7 @@
 package com.me.mariobros.sprite;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.me.mariobros.MarioBros;
 import com.me.mariobros.scenes.Hud;
@@ -8,8 +9,8 @@ import com.me.mariobros.screens.PlayScreen;
 
 public class Brick extends InteractiveTileObject {
 
-    public Brick(PlayScreen screen, Rectangle bounds) {
-        super(screen, bounds);
+    public Brick(PlayScreen screen, MapObject object) {
+        super(screen, object);
         fixture.setUserData(this);
         setCategoryFilter(MarioBros.BRICK_BIT);
     }
