@@ -20,8 +20,11 @@ import com.me.mariobros.screens.PlayScreen;
 
 public class Mario extends Sprite {
 
+    public enum AndroidTouch {LEFT_RUNNING, RIGHT_RUNNING, NOTHING}
+
     public enum State {FALLING, JUMPING, STANDING, RUNNING, GROWING, DEAD}
 
+    private AndroidTouch androidTouch;
     public State currentState;
     public State previousState;
 
@@ -47,6 +50,7 @@ public class Mario extends Sprite {
     public Mario(PlayScreen screen) {
 
         this.world = screen.getWorld();
+        androidTouch = AndroidTouch.NOTHING;
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -121,6 +125,18 @@ public class Mario extends Sprite {
         MarioBros.manager.get("audio/sounds/powerup.wav", Sound.class).play();
     }
 
+    public void moveLeftBegin() {
+        androidTouch = AndroidTouch.LEFT_RUNNING;
+    }
+
+    public void moveRightBegin() {
+        androidTouch = AndroidTouch.RIGHT_RUNNING;
+    }
+
+    public void stopAnyMove() {
+        androidTouch = AndroidTouch.NOTHING;
+    }
+
     public void update(float dt) {
         if (marioIsBig) {
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / MarioBros.PPM);
@@ -133,6 +149,14 @@ public class Mario extends Sprite {
         }
         if (timeToRedefineMario) {
             redefineMario();
+        }
+
+        if (androidTouch == AndroidTouch.LEFT_RUNNING) {
+            b2body.setLinearVelocity(-1.2f, b2body.getLinearVelocity().y);
+        }
+
+        if (androidTouch == AndroidTouch.RIGHT_RUNNING) {
+            b2body.setLinearVelocity(1.2f, b2body.getLinearVelocity().y);
         }
     }
 

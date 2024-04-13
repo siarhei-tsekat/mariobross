@@ -7,18 +7,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -30,12 +23,10 @@ import com.me.mariobros.items.Mushroom;
 import com.me.mariobros.scenes.GameOverScreen;
 import com.me.mariobros.scenes.Hud;
 import com.me.mariobros.sprite.Enemy;
-import com.me.mariobros.sprite.Goomba;
 import com.me.mariobros.sprite.Mario;
 import com.me.mariobros.tools.B2WorldCreator;
 import com.me.mariobros.tools.WorldContactListener;
 
-import java.util.PriorityQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
@@ -44,7 +35,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
 
     private OrthographicCamera gamecam;
-    private Viewport gamePort;
+    public Viewport gamePort;
 
     private Hud hud;
     private TmxMapLoader mapLoader;
@@ -67,12 +58,13 @@ public class PlayScreen implements Screen {
 
         gamecam = new OrthographicCamera();
         gamePort = new FillViewport(MarioBros.V_WIDTH / MarioBros.PPM, MarioBros.V_HEIGHT / MarioBros.PPM, gamecam);
+        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+
         hud = new Hud(game.batch);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MarioBros.PPM);
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
@@ -80,7 +72,7 @@ public class PlayScreen implements Screen {
         creator = new B2WorldCreator(this);
 
         player = new Mario(this);
-
+        hud.setPlayer(player);
         world.setContactListener(new WorldContactListener());
 
         music = MarioBros.manager.get("audio/music/mario_music.ogg", Music.class);
@@ -137,7 +129,7 @@ public class PlayScreen implements Screen {
 
         hud.update(dt);
 
-        if (player.currentState != Mario.State.DEAD) {
+        if (player.currentState != Mario.State.DEAD && player.b2body.getPosition().x > 2) {
             // attach our gamecam to our players.x coordinate
             gamecam.position.x = player.b2body.getPosition().x;
         }
@@ -153,18 +145,6 @@ public class PlayScreen implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
             }
 
-            if (Gdx.input.isTouched()) {
-                if (Gdx.input.getX() < Gdx.graphics.getWidth() / 2 && player.b2body.getLinearVelocity().x >= -2) {
-                    //left
-                    player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
-                } else if (player.b2body.getLinearVelocity().x <= 2) {
-                    player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                }
-
-                if (Gdx.input.getY() < Gdx.graphics.getHeight() / 2) {
-                    player.b2body.applyLinearImpulse(new Vector2(0, 0.4f), player.b2body.getWorldCenter(), true);
-                }
-            }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
                 player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
             }
@@ -212,7 +192,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
-        if(gameOver()) {
+        if (gameOver()) {
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
