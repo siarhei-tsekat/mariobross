@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
-    public PlayScreen(MarioBros game) {
+    public PlayScreen(MarioBros game, String levelMap) {
 
         this.atlas = new TextureAtlas("mario_and_enemies.pack");
         this.game = game;
@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
         hud = new Hud(game.batch);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load(levelMap);
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MarioBros.PPM);
 
         world = new World(new Vector2(0, -10), true);
@@ -139,10 +139,20 @@ public class PlayScreen implements Screen {
         renderer.setView(gamecam);
     }
 
+    private long lastJumpTime = 0;
+
     private void handleInput(float dt) {
         if (player.currentState != Mario.State.DEAD) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
+
+                boolean not_higher_then_80_percentages = player.b2body.getPosition().y < MarioBros.V_HEIGHT / MarioBros.PPM - (MarioBros.V_HEIGHT / 4f / MarioBros.PPM);
+
+                boolean f = (System.currentTimeMillis() - lastJumpTime) > 150 || lastJumpTime == 0;
+
+                if (not_higher_then_80_percentages && f) {
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                    lastJumpTime = System.currentTimeMillis();
+                }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {

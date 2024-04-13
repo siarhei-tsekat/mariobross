@@ -132,12 +132,21 @@ public class Hud implements Disposable {
         jumpBtn.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                boolean not_higher_then_80_percentages = player.b2body.getPosition().y < MarioBros.V_HEIGHT / MarioBros.PPM - (MarioBros.V_HEIGHT / 4f / MarioBros.PPM);
+
+                boolean f = (System.currentTimeMillis() - lastJumpTime) > 150 || lastJumpTime == 0;
+
+                if (not_higher_then_80_percentages && f) {
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                    lastJumpTime = System.currentTimeMillis();
+                }
                 event.handle();
                 return true;
             }
         });
     }
+
+    long lastJumpTime = 0;
 
     public void update(float dt) {
         timeCount += dt;
