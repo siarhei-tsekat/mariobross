@@ -25,6 +25,7 @@ public class MarioBros extends Game {
     public static final short ENEMY_HEAD_BIT = 128;
     public static final short ITEM_BIT = 256;
     public static final short MARIO_HEAD_BIT = 512;
+    public static final short EMPTY_GROUND = 1024;
 
     /*
         Warning
@@ -49,8 +50,8 @@ public class MarioBros extends Game {
         manager.load("audio/sounds/mariodie.wav", Sound.class);
         manager.finishLoading();
 
-//        setScreen(new PlayScreen(this, "level_2/mario_level_2.tmx"));
-        setScreen(new PlayScreen(this, "level_1/mario_level_1.tmx"));
+        setScreen(new PlayScreen(this, "level_2/mario_level_2.tmx"));
+//        setScreen(new PlayScreen(this, "level_1/mario_level_1.tmx"));
     }
 
     @Override

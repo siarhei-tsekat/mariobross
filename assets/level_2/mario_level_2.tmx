@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="80">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="93">
  <tileset firstgid="1" source="tileset_gutter.tsx"/>
  <layer id="1" name="background" width="240" height="13">
   <data encoding="base64" compression="zlib">
@@ -44,7 +44,11 @@
   <object id="21" x="1552" y="160" width="31.875" height="31.75"/>
   <object id="22" x="2608.13" y="127.75" width="32.125" height="63.875"/>
   <object id="23" x="2816.13" y="127.875" width="31.875" height="64"/>
-  <object id="24" x="3808.13" y="159.875" width="31.875" height="32.25"/>
+  <object id="24" x="3808.13" y="159.875" width="31.875" height="32.25">
+   <properties>
+    <property name="exit" value=""/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="5" name="coins">
   <object id="25" x="368.125" y="127.875" width="15.25" height="16"/>
@@ -64,6 +68,8 @@
     <property name="mushroom" value=""/>
    </properties>
   </object>
+  <object id="80" x="464.364" y="128.182" width="14.5455" height="15.4545"/>
+  <object id="81" x="2256" y="128.333" width="15.3333" height="15"/>
  </objectgroup>
  <objectgroup id="6" name="bricks">
   <object id="38" x="447.818" y="128.364" width="16.3636" height="15.4545"/>
@@ -105,5 +111,18 @@
   <object id="77" x="2575.64" y="175.818" width="16.5455" height="15.8182"/>
   <object id="78" x="1376" y="175.818" width="16.1818" height="16"/>
   <object id="79" x="688" y="176" width="16.5455" height="16.1818"/>
+ </objectgroup>
+ <objectgroup id="11" name="ground_empty">
+  <object id="82" x="800" y="192.333" width="32" height="16"/>
+  <object id="83" x="1344" y="192" width="15.6667" height="15.3333"/>
+  <object id="84" x="1423.67" y="192.333" width="16" height="15"/>
+  <object id="85" x="1760" y="192" width="15.6667" height="15.6667"/>
+  <object id="86" x="1759.67" y="176" width="16.6667" height="15.6667"/>
+  <object id="87" x="1423.67" y="175.667" width="15.6667" height="16.3333"/>
+  <object id="88" x="1343.67" y="176.333" width="16.3333" height="16"/>
+  <object id="89" x="799.667" y="175.333" width="31.6667" height="17.3333"/>
+  <object id="90" x="0.333333" y="176" width="15" height="16.6667"/>
+  <object id="91" x="1936" y="176.333" width="16" height="31.3333"/>
+  <object id="92" x="2096" y="176.333" width="16.3333" height="31"/>
  </objectgroup>
 </map>
