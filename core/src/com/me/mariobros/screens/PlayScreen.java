@@ -24,7 +24,8 @@ import com.me.mariobros.scenes.GameOverScreen;
 import com.me.mariobros.scenes.Hud;
 import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Mario;
-import com.me.mariobros.tools.B2WorldCreator;
+import com.me.mariobros.tools.B2WorldCreator_Level_1;
+import com.me.mariobros.tools.B2WorldCreator_Level_2;
 import com.me.mariobros.tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -47,7 +48,7 @@ public class PlayScreen implements Screen {
     private Mario player;
 
     private Music music;
-    private B2WorldCreator creator;
+    private B2WorldCreator_Level_1 creator;
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
@@ -69,7 +70,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        creator = new B2WorldCreator(this);
+        creator = new B2WorldCreator_Level_1(this);
 
         player = new Mario(this);
         hud.setPlayer(player);

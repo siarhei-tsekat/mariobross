@@ -18,12 +18,12 @@ import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Goomba;
 import com.me.mariobros.sprite.Turtle;
 
-public class B2WorldCreator {
+public class B2WorldCreator_Level_2 {
 
     private Array<Goomba> goombas;
     private Array<Turtle> turtles;
 
-    public B2WorldCreator(PlayScreen screen) {
+    public B2WorldCreator_Level_2(PlayScreen screen) {
 
         World world = screen.getWorld();
         TiledMap map = screen.getMap();

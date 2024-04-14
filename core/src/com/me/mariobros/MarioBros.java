@@ -50,8 +50,8 @@ public class MarioBros extends Game {
         manager.load("audio/sounds/mariodie.wav", Sound.class);
         manager.finishLoading();
 
-        setScreen(new PlayScreen(this, "level_2/mario_level_2.tmx"));
-//        setScreen(new PlayScreen(this, "level_1/mario_level_1.tmx"));
+//        setScreen(new PlayScreen(this, "level_2/mario_level_2.tmx"));
+        setScreen(new PlayScreen(this, "level_1/mario_level_1.tmx"));
     }
 
     @Override
