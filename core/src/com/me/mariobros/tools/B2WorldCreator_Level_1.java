@@ -98,6 +98,20 @@ public class B2WorldCreator_Level_1 {
             fdef.filter.categoryBits = MarioBros.EMPTY_GROUND;
             body.createFixture(fdef);
         }
+
+        // mario world borders
+        for (MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MarioBros.PPM, (rect.getY() + rect.getHeight() / 2) / MarioBros.PPM);
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MarioBros.PPM, rect.getHeight() / 2 / MarioBros.PPM);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = MarioBros.OBJECT_BIT;
+            body.createFixture(fdef);
+        }
     }
 
 
