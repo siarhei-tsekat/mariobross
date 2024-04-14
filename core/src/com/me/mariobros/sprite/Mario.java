@@ -158,6 +158,10 @@ public class Mario extends Sprite {
         if (androidTouch == AndroidTouch.RIGHT_RUNNING) {
             b2body.setLinearVelocity(1.2f, b2body.getLinearVelocity().y);
         }
+
+        if (b2body.getPosition().y < 0 || b2body.getPosition().x < 0) {
+            currentState = State.DEAD;
+        }
     }
 
     public void redefineMario() {
