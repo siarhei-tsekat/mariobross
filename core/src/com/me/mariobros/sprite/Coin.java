@@ -1,44 +1,69 @@
 package com.me.mariobros.sprite;
 
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.utils.Array;
 import com.me.mariobros.MarioBros;
-import com.me.mariobros.items.ItemDef;
-import com.me.mariobros.items.Mushroom;
-import com.me.mariobros.scenes.Hud;
+import com.me.mariobros.items.Item;
 import com.me.mariobros.screens.PlayScreen;
 
-public class Coin extends InteractiveTileObject {
+public class Coin extends Item {
 
-    private static TiledMapTileSet tileSet;
-    private final int BLANK_COIN = 28;
+    private Animation<TextureRegion> coins;
+    private float stateTimer;
+    private int lifeTime = 0;
 
-    public Coin(PlayScreen screen, MapObject object) {
-        super(screen, object);
-        tileSet = map.getTileSets().getTileSet("tileset_gutter");
-        fixture.setUserData(this);
-        setCategoryFilter(MarioBros.COIN_BIT);
+    public Coin(PlayScreen screen, float x, float y) {
+        super(screen, x, y);
+
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("coins_white"), 4, 6, 24, 24));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("coins_white"), 34, 6, 24, 24));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("coins_white"), 64, 6, 24, 24));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("coins_white"), 94, 6, 24, 24));
+
+        coins = new Animation<TextureRegion>(0.1f, frames);
+
     }
 
     @Override
-    public void onHeadHit(Mario mario) {
+    public void defineItem() {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(getX(), getY());
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bdef);
 
-        if (getCell().getTile().getId() == BLANK_COIN) {
-            MarioBros.manager.get("audio/sounds/bump.wav", Sound.class).play();
-        } else {
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(3 / MarioBros.PPM);
 
-            if (object.getProperties().containsKey("mushroom")) {
-                screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y + 16 / MarioBros.PPM), Mushroom.class));
-                MarioBros.manager.get("audio/sounds/powerup_spawn.wav", Sound.class).play();
-            } else {
-                MarioBros.manager.get("audio/sounds/coin.wav", Sound.class).play();
-            }
+        fdef.filter.categoryBits = MarioBros.ITEM_BIT;
+        fdef.filter.maskBits = MarioBros.MARIO_BIT | MarioBros.OBJECT_BIT | MarioBros.GROUND_BIT | MarioBros.COIN_BIT | MarioBros.BRICK_BIT;
+        fdef.shape = shape;
+        body.createFixture(fdef).setUserData(this);
+
+        body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
+    }
+
+    @Override
+    public void use(Mario mario) {
+
+    }
+
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setRegion(coins.getKeyFrame(stateTimer, true));
+        stateTimer = stateTimer + dt;
+
+        if (lifeTime++ > 25) {
+            destroy();
         }
-
-        getCell().setTile(tileSet.getTile(BLANK_COIN));
-        Hud.addScore(100);
     }
 }

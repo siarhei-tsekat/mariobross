@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -22,6 +24,7 @@ import com.me.mariobros.items.ItemDef;
 import com.me.mariobros.items.Mushroom;
 import com.me.mariobros.scenes.GameOverScreen;
 import com.me.mariobros.scenes.Hud;
+import com.me.mariobros.sprite.Coin;
 import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Mario;
 import com.me.mariobros.tools.B2WorldCreator_Level_1;
@@ -29,6 +32,8 @@ import com.me.mariobros.tools.B2WorldCreator_Level_2;
 import com.me.mariobros.tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
+
+import sun.jvm.hotspot.opto.Block;
 
 public class PlayScreen implements Screen {
 
@@ -94,6 +99,10 @@ public class PlayScreen implements Screen {
             ItemDef itemDef = itemsToSpawn.poll();
             if (itemDef.type == Mushroom.class) {
                 items.add(new Mushroom(this, itemDef.position.x, itemDef.position.y));
+            }
+
+            if (itemDef.type == Coin.class) {
+                items.add(new Coin(this, itemDef.position.x, itemDef.position.y));
             }
         }
     }
@@ -198,6 +207,17 @@ public class PlayScreen implements Screen {
         }
 
         game.batch.end();
+
+//        game.sr.setProjectionMatrix(gamecam.combined);
+//        game.sr.begin(ShapeRenderer.ShapeType.Line);
+//        game.sr.setColor(new Color(1,0,1,0));
+//
+//        for (Item item : items) {
+//            game.sr.rect((item.getX()), (item.getY()), item.getWidth(), item.getHeight());
+//        }
+//
+//        game.sr.rect((player.getX()), (player.getY()), player.getWidth(), player.getHeight());
+//        game.sr.end();
 
         // set our batch to now draw what the hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);

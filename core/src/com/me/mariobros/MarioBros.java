@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.me.mariobros.screens.PlayScreen;
 
 public class MarioBros extends Game {
@@ -13,6 +14,7 @@ public class MarioBros extends Game {
     // pixels per meter
     public static final float PPM = 100;
     public SpriteBatch batch;
+    public ShapeRenderer sr;
 
     public static final short NOTHING_BIT = 0;
     public static final short GROUND_BIT = 1;
@@ -37,7 +39,7 @@ public class MarioBros extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-
+        sr = new ShapeRenderer();
         manager = new AssetManager();
         manager.load("audio/music/mario_music.ogg", Music.class);
         manager.load("audio/sounds/coin.wav", Sound.class);

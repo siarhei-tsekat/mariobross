@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.me.mariobros.MarioBros;
 import com.me.mariobros.screens.PlayScreen;
 import com.me.mariobros.sprite.Brick;
-import com.me.mariobros.sprite.Coin;
+import com.me.mariobros.sprite.QuestionTile;
 import com.me.mariobros.sprite.Enemy;
 import com.me.mariobros.sprite.Goomba;
 import com.me.mariobros.sprite.Turtle;
@@ -67,7 +67,7 @@ public class B2WorldCreator_Level_2 {
 
         // create coin bodies/fixtures
         for (MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
-            new Coin(screen, object);
+            new QuestionTile(screen, object);
         }
 
         // create all goombas
