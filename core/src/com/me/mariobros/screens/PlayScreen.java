@@ -139,7 +139,7 @@ public class PlayScreen implements Screen {
 
         hud.update(dt);
 
-        if (player.currentState != Mario.State.DEAD && player.b2body.getPosition().x > 2) {
+        if (player.currentState != Mario.State.DEAD && player.b2body.getPosition().x > 2 && (player.b2body.getPosition().x < 33)) {
             // attach our gamecam to our players.x coordinate
             gamecam.position.x = player.b2body.getPosition().x;
         }
